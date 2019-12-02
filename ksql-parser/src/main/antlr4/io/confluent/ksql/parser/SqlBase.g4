@@ -33,7 +33,7 @@ singleExpression
 
 statement
     : query                                                                 #queryStatement
-    | (LIST | SHOW) PROPERTIES                                              #listProperties
+    | (LIST | SHOW) PROPERTIES (CONNECT)?                                   #listProperties
     | (LIST | SHOW) TOPICS EXTENDED?                                        #listTopics
     | (LIST | SHOW) STREAMS EXTENDED?                                       #listStreams
     | (LIST | SHOW) TABLES EXTENDED?                                        #listTables
@@ -448,6 +448,7 @@ RUN: 'RUN';
 SCRIPT: 'SCRIPT';
 DECIMAL: 'DECIMAL';
 KEY: 'KEY';
+CONNECT: 'CONNECT';
 CONNECTOR: 'CONNECTOR';
 CONNECTORS: 'CONNECTORS';
 SINK: 'SINK';
