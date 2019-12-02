@@ -77,7 +77,7 @@ public class DistributingExecutorTest {
   private static final KsqlConfig KSQL_CONFIG = new KsqlConfig(new HashMap<>());
   private static final ConfiguredStatement<Statement> EMPTY_STATEMENT =
       ConfiguredStatement.of(
-          PreparedStatement.of("", new ListProperties(Optional.empty())),
+          PreparedStatement.of("", new ListProperties(Optional.empty(), false)),
           ImmutableMap.of(),
           KSQL_CONFIG
       );
@@ -180,7 +180,7 @@ public class DistributingExecutorTest {
     final KsqlException cause = new KsqlException("fail");
 
     final PreparedStatement<Statement> preparedStatement =
-        PreparedStatement.of("x", new ListProperties(Optional.empty()));
+        PreparedStatement.of("x", new ListProperties(Optional.empty(), false));
 
     final ConfiguredStatement<Statement> configured =
         ConfiguredStatement.of(
@@ -204,7 +204,7 @@ public class DistributingExecutorTest {
   public void shouldThrowFailureIfCannotInferSchema() {
     // Given:
     final PreparedStatement<Statement> preparedStatement =
-        PreparedStatement.of("", new ListProperties(Optional.empty()));
+        PreparedStatement.of("", new ListProperties(Optional.empty(), false));
     final ConfiguredStatement<Statement> configured =
         ConfiguredStatement.of(preparedStatement, ImmutableMap.of(), KSQL_CONFIG);
     when(schemaInjector.inject(any())).thenThrow(new KsqlException("Could not infer!"));
@@ -222,7 +222,7 @@ public class DistributingExecutorTest {
     // Given:
     final ServiceContext userServiceContext = mock(ServiceContext.class);
     final PreparedStatement<Statement> preparedStatement =
-        PreparedStatement.of("", new ListProperties(Optional.empty()));
+        PreparedStatement.of("", new ListProperties(Optional.empty(), false));
     final ConfiguredStatement<Statement> configured =
         ConfiguredStatement.of(preparedStatement, ImmutableMap.of(), KSQL_CONFIG);
     doThrow(KsqlTopicAuthorizationException.class).when(authorizationValidator)
@@ -240,7 +240,7 @@ public class DistributingExecutorTest {
     // Given:
     final ServiceContext userServiceContext = SandboxedServiceContext.create(TestServiceContext.create());
     final PreparedStatement<Statement> preparedStatement =
-        PreparedStatement.of("", new ListProperties(Optional.empty()));
+        PreparedStatement.of("", new ListProperties(Optional.empty(), false));
     final ConfiguredStatement<Statement> configured =
         ConfiguredStatement.of(preparedStatement, ImmutableMap.of(), KSQL_CONFIG);
     doThrow(KsqlTopicAuthorizationException.class).when(authorizationValidator)

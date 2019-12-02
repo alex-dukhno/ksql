@@ -25,8 +25,11 @@ import java.util.Optional;
 @Immutable
 public class ListProperties extends Statement {
 
-  public ListProperties(final Optional<NodeLocation> location) {
+  public final boolean connect;
+
+  public ListProperties(final Optional<NodeLocation> location, boolean connect) {
     super(location);
+    this.connect = connect;
   }
 
   @Override

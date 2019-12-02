@@ -653,7 +653,7 @@ public class AstBuilder {
 
     @Override
     public Node visitListProperties(final SqlBaseParser.ListPropertiesContext context) {
-      return new ListProperties(getLocation(context));
+      return new ListProperties(getLocation(context), context.CONNECT() != null);
     }
 
     @Override

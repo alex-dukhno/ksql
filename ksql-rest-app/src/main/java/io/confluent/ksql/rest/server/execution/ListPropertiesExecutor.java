@@ -22,12 +22,19 @@ import io.confluent.ksql.rest.entity.KsqlEntity;
 import io.confluent.ksql.rest.entity.PropertiesList;
 import io.confluent.ksql.services.ServiceContext;
 import io.confluent.ksql.statement.ConfiguredStatement;
+import io.confluent.ksql.util.KsqlConfig;
+
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.stream.Collectors;
+
+import org.apache.kafka.common.utils.Utils;
 
 public final class ListPropertiesExecutor {
 
@@ -39,6 +46,18 @@ public final class ListPropertiesExecutor {
       final KsqlExecutionContext executionContext,
       final ServiceContext serviceContext
   ) {
+    if (statement.getStatement().connect) {
+      String configFile = statement.getConfig()
+          .getString(KsqlConfig.CONNECT_WORKER_CONFIG_FILE_PROPERTY);
+      Map<String, String> props = !configFile.isEmpty()
+          ? Utils.propsToStringMap(getWorkerProps(configFile))
+          : Collections.emptyMap();
+      return Optional.of(new PropertiesList(
+          statement.getStatementText(),
+          props,
+          Collections.emptyList(),
+          Collections.emptyList()));
+    }
     final KsqlConfigResolver resolver = new KsqlConfigResolver();
 
     final Map<String, String> engineProperties
@@ -65,4 +84,11 @@ public final class ListPropertiesExecutor {
         statement.getStatementText(), mergedProperties, overwritten, defaultProps));
   }
 
+  private static Properties getWorkerProps(String configFile) {
+    try {
+      return Utils.loadProps(configFile);
+    } catch (IOException e) {
+      return new Properties();
+    }
+  }
 }

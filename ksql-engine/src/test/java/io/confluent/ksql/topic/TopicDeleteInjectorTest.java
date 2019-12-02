@@ -100,7 +100,7 @@ public class TopicDeleteInjectorTest {
   public void shouldDoNothingForNonDropStatements() {
     // Given:
     final ConfiguredStatement<ListProperties> listProperties =
-        givenStatement("LIST", new ListProperties(Optional.empty()));
+        givenStatement("LIST", new ListProperties(Optional.empty(), false));
 
     // When:
     final ConfiguredStatement<ListProperties> injected = deleteInjector.inject(listProperties);

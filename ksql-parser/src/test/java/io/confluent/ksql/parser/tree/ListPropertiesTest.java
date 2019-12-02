@@ -30,8 +30,8 @@ public class ListPropertiesTest {
     new EqualsTester()
         .addEqualityGroup(
             // Note: At the moment location does not take part in equality testing
-            new ListProperties(Optional.of(SOME_LOCATION)),
-            new ListProperties(Optional.of(OTHER_LOCATION))
+            new ListProperties(Optional.of(SOME_LOCATION), false),
+            new ListProperties(Optional.of(OTHER_LOCATION), false)
         )
         .testEquals();
   }
